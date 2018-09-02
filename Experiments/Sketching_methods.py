@@ -19,8 +19,8 @@ from scipy.fftpack import dct
 # RETURN: [VE, PE, RE, time]
 # apply Gaussian random projection on X and Y
 def gaussian_projection(data, r):
-    n, p, beta, X, Y, v_full, p_full, r_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full, data.p_full,
-                                                data.r_full]
+    n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
+                                                           data.p_full, data.r_full, data.beta_full]
     S = np.random.randn(r, n)
     x_tilde = S @ X
     y_tilde = S @ Y
@@ -28,15 +28,20 @@ def gaussian_projection(data, r):
     ve = np.linalg.norm(beta - beta_hat) ** 2 / v_full
     pe = np.linalg.norm(X @ beta - X @ beta_hat) ** 2 / p_full
     re = np.linalg.norm(Y - X @ beta_hat) ** 2 / r_full
-    return ve, pe, re
+
+    x_test = np.random.randn(n, p)
+    epsilon_test = np.random.randn(n, 1)
+    y_test = x_test @ beta + epsilon_test
+    oe = np.linalg.norm(y_test - x_test @ beta_hat) ** 2 / np.linalg.norm(y_test - x_test @ beta_full) ** 2
+    return ve, pe, re, oe
 
 
 # INPUT: target dimension r, density of the projection matrix s
 # RETURN: [VE, PE, RE, time]
 # apply sparse matrix multiplication on X and Y
 def sparse_projection(data, r, s=0.1):
-    n, p, beta, X, Y, v_full, p_full, r_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full, data.p_full,
-                                                data.r_full]
+    n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
+                                                           data.p_full, data.r_full, data.beta_full]
     S = csr_matrix(np.random.choice([-1, 0, 1], p=[s / 2, 1 - s, s / 2], size=r * n).reshape((r, n)))
     x_tilde = S @ X
     y_tilde = S @ Y
@@ -45,7 +50,12 @@ def sparse_projection(data, r, s=0.1):
     ve = np.linalg.norm(beta - beta_hat) ** 2 / v_full
     pe = np.linalg.norm(X @ beta - X @ beta_hat) ** 2 / p_full
     re = np.linalg.norm(Y - X @ beta_hat) ** 2 / r_full
-    return ve, pe, re
+
+    x_test = np.random.randn(n, p)
+    epsilon_test = np.random.randn(n, 1)
+    y_test = x_test @ beta + epsilon_test
+    oe = np.linalg.norm(y_test - x_test @ beta_hat) ** 2 / np.linalg.norm(y_test - x_test @ beta_full) ** 2
+    return ve, pe, re, oe
 
 
 # INPUT: n, p
@@ -61,8 +71,8 @@ def generate_haar_matrix(n, p):
 # RETURN: [VE, PE, RE, time]
 # apply Gaussian random projection on X and Y
 def haar_projection(data, r):
-    n, p, beta, X, Y, v_full, p_full, r_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full, data.p_full,
-                                                data.r_full]
+    n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
+                                                           data.p_full, data.r_full, data.beta_full]
     S = generate_haar_matrix(r, n)
     x_tilde = S @ X
     y_tilde = S @ Y
@@ -70,15 +80,20 @@ def haar_projection(data, r):
     ve = np.linalg.norm(beta - beta_hat) ** 2 / v_full
     pe = np.linalg.norm(X @ beta - X @ beta_hat) ** 2 / p_full
     re = np.linalg.norm(Y - X @ beta_hat) ** 2 / r_full
-    return ve, pe, re
+
+    x_test = np.random.randn(n, p)
+    epsilon_test = np.random.randn(n, 1)
+    y_test = x_test @ beta + epsilon_test
+    oe = np.linalg.norm(y_test - x_test @ beta_hat) ** 2 / np.linalg.norm(y_test - x_test @ beta_full) ** 2
+    return ve, pe, re, oe
 
 
 # INPUT: target dimension r
 # RETURN: [VE, PE, RE, time]
 # apply signed permutation, fast DCT for each column (scipy.fftpack), and subsampling on X and Y
 def hadamard_projection(data, r):
-    n, p, beta, X, Y, v_full, p_full, r_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full, data.p_full,
-                                                data.r_full]
+    n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
+                                                           data.p_full, data.r_full, data.beta_full]
     data_tilde = np.concatenate([X, Y], axis=1)
     data_tilde[: int(n / 2), :] = -data_tilde[: int(n / 2), :]
     np.random.shuffle(data_tilde)
@@ -92,15 +107,20 @@ def hadamard_projection(data, r):
     ve = np.linalg.norm(beta - beta_hat) ** 2 / v_full
     pe = np.linalg.norm(X @ beta - X @ beta_hat) ** 2 / p_full
     re = np.linalg.norm(Y - X @ beta_hat) ** 2 / r_full
-    return ve, pe, re
+
+    x_test = np.random.randn(n, p)
+    epsilon_test = np.random.randn(n, 1)
+    y_test = x_test @ beta + epsilon_test
+    oe = np.linalg.norm(y_test - x_test @ beta_hat) ** 2 / np.linalg.norm(y_test - x_test @ beta_full) ** 2
+    return ve, pe, re, oe
 
 
 # INPUT: target dimension r
 # RETURN: [VE, PE, RE, time]
 # apply uniform sampling without replacement on X and Y
 def uniform_sampling(data, r):
-    n, p, beta, X, Y, v_full, p_full, r_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full, data.p_full,
-                                                data.r_full]
+    n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
+                                                           data.p_full, data.r_full, data.beta_full]
     idx_uniform = np.random.choice(n, r, replace=False)
     x_tilde = X[idx_uniform, :]
     y_tilde = Y[idx_uniform]
@@ -108,7 +128,12 @@ def uniform_sampling(data, r):
     ve = np.linalg.norm(beta - beta_hat) ** 2 / v_full
     pe = np.linalg.norm(X @ beta - X @ beta_hat) ** 2 / p_full
     re = np.linalg.norm(Y - X @ beta_hat) ** 2 / r_full
-    return ve, pe, re
+
+    x_test = np.random.randn(n, p)
+    epsilon_test = np.random.randn(n, 1)
+    y_test = x_test @ beta + epsilon_test
+    oe = np.linalg.norm(y_test - x_test @ beta_hat) ** 2 / np.linalg.norm(y_test - x_test @ beta_full) ** 2
+    return ve, pe, re, oe
 
 
 # INPUT: r_1
@@ -133,9 +158,9 @@ def fast_leverage(data, r_1):
 # RETURN: [VE, PE, RE, time]
 # estimate the leverage scores of X
 # sampling each row of X w.r.t. leverage scores without replacement on X and Ys
-def leverage_sampling(r):
-    n, p, beta, X, Y, v_full, p_full, r_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full, data.p_full,
-                                                data.r_full]
+def leverage_sampling(data, r):
+    n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
+                                                           data.p_full, data.r_full, data.beta_full]
     leverage_estimate = fast_leverage(data, int(np.log(n) * p))
     idx_leverage = np.random.choice(n, r, p=leverage_estimate / sum(leverage_estimate), replace=False)
     x_tilde = X[idx_leverage, :]
@@ -144,15 +169,20 @@ def leverage_sampling(r):
     ve = np.linalg.norm(beta - beta_hat) ** 2 / v_full
     pe = np.linalg.norm(X @ beta - X @ beta_hat) ** 2 / p_full
     re = np.linalg.norm(Y - X @ beta_hat) ** 2 / r_full
-    return ve, pe, re
+
+    x_test = np.random.randn(n, p)
+    epsilon_test = np.random.randn(n, 1)
+    y_test = x_test @ beta + epsilon_test
+    oe = np.linalg.norm(y_test - x_test @ beta_hat) ** 2 / np.linalg.norm(y_test - x_test @ beta_full) ** 2
+    return ve, pe, re, oe
 
 
 # INPUT: target dimension r
 # RETURN: [VE, PE]
 # use the r data points with largest leverage scores
 def largest_leverage(data, r):
-    n, p, beta, X, Y, v_full, p_full, r_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full, data.p_full,
-                                                data.r_full]
+    n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
+                                                           data.p_full, data.r_full, data.beta_full]
     leverage_estimate = fast_leverage(data, int(np.log(n) * p))
     idx_deter_leverage = np.argsort(leverage_estimate)[(n - r): n]
     x_tilde = X[idx_deter_leverage, :]
@@ -161,5 +191,9 @@ def largest_leverage(data, r):
     ve = np.linalg.norm(beta - beta_hat) ** 2 / v_full
     pe = np.linalg.norm(X @ beta - X @ beta_hat) ** 2 / p_full
     re = np.linalg.norm(Y - X @ beta_hat) ** 2 / r_full
-    return ve, pe, re
 
+    x_test = np.random.randn(n, p)
+    epsilon_test = np.random.randn(n, 1)
+    y_test = x_test @ beta + epsilon_test
+    oe = np.linalg.norm(y_test - x_test @ beta_hat) ** 2 / np.linalg.norm(y_test - x_test @ beta_full) ** 2
+    return ve, pe, re, oe
