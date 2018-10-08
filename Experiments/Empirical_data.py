@@ -31,6 +31,9 @@ c = np.linspace(0.1, 1, 20)
 rep = 50
 
 
+# INPUT: target dimension r
+# OUTPUT: [RE, OE]
+# apply SRHT, then do linear regression
 def hadamard_projection(r):
     data_tilde = np.concatenate([X, Y], axis=1)
     data_tilde[: int(n / 2), :] = -data_tilde[: int(n / 2), :]
@@ -51,6 +54,9 @@ def hadamard_projection(r):
     return re, oe
 
 
+# INPUT: target dimension r
+# OUTPUT: [RE, OE]
+# apply Gaussian projection, then do linear regression
 def gaussian_projection(r):
     S = np.random.randn(r, n)
     x_tilde = S @ X
@@ -65,6 +71,9 @@ def gaussian_projection(r):
     return re, oe
 
 
+# INPUT: target dimension r
+# OUTPUT: [RE, OE]
+# apply uniform sampling, then do linear regression
 def uniform_sampling(r):
     idx_uniform = np.random.choice(n, r, replace=False)
     x_tilde = X[idx_uniform, :]
@@ -80,9 +89,8 @@ def uniform_sampling(r):
 
 
 # INPUT: target dimension r
-# RETURN: [VE, PE, RE, time]
-# estimate the leverage scores of X
-# sampling each row of X w.r.t. leverage scores without replacement on X and Ys
+# OUTPUT: [VE, PE]
+# sampling each row of X w.r.t. leverage scores without replacement on X and Y, then do linear regression
 def leverage_sampling(r):
     leverage_probability = leverage_score / p * r
     leverage_probability[leverage_probability > 1] = 1
@@ -100,6 +108,7 @@ def leverage_sampling(r):
     return re, oe
 
 
+# estimate the leverage scores according to Drineas et al
 def fast_leverage():
     r_1 = 150
     x_tilde = X

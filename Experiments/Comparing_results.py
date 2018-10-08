@@ -1,11 +1,11 @@
 """
-    Compare our results with Raskutti et al's
-    Plots in Section 4.4
+    Compare our results with Raskutti & Mahoney' s paper:
+    A statistical perspective on randomized sketching for ordinary least-squares
+    Plots in Section 5.10.1, Figure 11
 """
 
 import matplotlib.pyplot as plt
 import numpy as np
-
 from Data import DATA
 from Sketching_methods import gaussian_projection
 from Sketching_methods import hadamard_projection
@@ -45,7 +45,7 @@ for xi in c:
     track_hadamard[i, :] = np.mean(vpro, axis=0)
     i = i + 1
 
-# PLOTS
+# Figure 11
 gamma = p / n
 d = np.linspace(0.15, 1, 500)
 plt.figure(0, figsize=(10, 8))

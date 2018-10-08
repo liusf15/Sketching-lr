@@ -1,6 +1,9 @@
+"""
+    This script includes the codes for creating Figure 1
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
-
 from Data import DATA
 from Sketching_methods import gaussian_projection
 from Sketching_methods import hadamard_projection
@@ -10,6 +13,7 @@ c = np.linspace(0.1, 1, 20)
 rep = 50
 track_msd = np.zeros((20, 2))
 track_flight = np.zeros((20, 2))
+
 # MSD
 n = 2000
 np.random.seed(13)
@@ -37,7 +41,7 @@ for xi in c:
     i = i + 1
 track_flight = track_flight / rep
 
-# PLOTS
+# Figure 1
 gamma = 90 / 2000
 d = np.linspace(0.15, 1, 500)
 plt.figure(1, figsize=(12, 6))

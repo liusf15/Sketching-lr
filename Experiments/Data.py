@@ -1,10 +1,12 @@
 """
-    Parameters, data, full OLS
+    This script defines the class DATA
 """
 
 import numpy as np
 import scipy.linalg
 import pandas as pd
+
+# class DATA: contains the (X,Y), parameters, aspect ratio, full OLS estimator
 
 
 class DATA:

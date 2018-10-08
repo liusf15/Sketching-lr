@@ -1,6 +1,10 @@
+"""
+    Test our results for Haar and Hadamard projection
+    Plots in Section 3.2, Figure 4
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
-
 from Data import DATA
 from Sketching_methods import haar_projection
 from Sketching_methods import hadamard_projection
@@ -27,7 +31,7 @@ for xi in c:
     track[i, :] = np.mean(vpro, axis=0)
     i = i + 1
 
-# PLOTS
+# Figure 5
 d = np.linspace(0.15, 1, 500)
 plt.figure(0, figsize=(10, 8))
 p11 = plt.subplot(221)
@@ -57,13 +61,11 @@ p22 = plt.subplot(224)
 p22.scatter(c[1:], track[1:, 3], label='Simulation')
 p22.plot(d, d*(1-gamma)/(d-gamma), label=r'Theory: $\frac{r(n-p)}{n(r-p)}$')
 p22.grid(linestyle='dotted')
-p22.set_ylabel('OE')
+p22.set_ylabel('OE', fontsize=13)
 p22.set_xlabel(r'$r/n$', fontsize=13)
 p22.legend()
 plt.subplots_adjust(hspace=.01)
 plt.savefig('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/Haar.png')
-
-
 
 # Hadamard projection
 i = 0
@@ -77,7 +79,7 @@ for xi in c:
     track[i, :] = np.mean(vpro, axis=0)
     i = i + 1
 
-# PLOTS
+# Figure 6
 d = np.linspace(0.15, 1, 500)
 plt.figure(0, figsize=(10, 8))
 p11 = plt.subplot(221)
@@ -107,7 +109,7 @@ p22 = plt.subplot(224)
 p22.scatter(c[1:], track[1:, 3], label='Simulation')
 p22.plot(d, d*(1-gamma)/(d-gamma), label=r'Theory: $\frac{r(n-p)}{n(r-p)}$')
 p22.grid(linestyle='dotted')
-p22.set_ylabel('OE')
+p22.set_ylabel('OE', fontsize=13)
 p22.set_xlabel(r'$r/n$', fontsize=13)
 p22.legend()
 plt.subplots_adjust(hspace=.01)

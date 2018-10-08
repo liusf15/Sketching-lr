@@ -1,9 +1,13 @@
+"""
+    Test our results for uniform and iid projection
+    Plots in Section 3.3
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
-
+from scipy.fftpack import dct
 from Data import DATA
 from Sketching_methods import uniform_sampling
-from Sketching_methods import leverage_sampling
 
 n = 2000
 p = 100
@@ -27,7 +31,7 @@ for xi in c:
     track[i, :] = np.mean(vpro, axis=0)
     i = i + 1
 
-# PLOTS
+# Figure 7
 d = np.linspace(0.15, 1, 500)
 plt.figure(0, figsize=(10, 8))
 p11 = plt.subplot(221)
@@ -57,7 +61,7 @@ p22 = plt.subplot(224)
 p22.scatter(c[1:], track[1:, 3], label='Simulation')
 p22.plot(d, d*(1-gamma)/(d-gamma), label=r'Theory: $\frac{r(n-p)}{n(r-p)}$')
 p22.grid(linestyle='dotted')
-p22.set_ylabel('OE')
+p22.set_ylabel('OE', fontsize=13)
 p22.set_xlabel(r'$r/n$', fontsize=13)
 p22.legend()
 plt.subplots_adjust(hspace=.01)
@@ -84,10 +88,18 @@ def leverage_sampling(r):
     return ve, pe, re, oe
 
 
+# generate data
+np.random.seed(20398)
 epsilon = np.random.randn(n, 1)
 Y = X @ beta + epsilon
-leverage_score = np.diag(X @ np.linalg.inv(X.T @ X) @ X.T)
 
+# full OLS
+beta_full = np.linalg.inv(X.T @ X) @ X.T @ Y
+v_full = np.linalg.norm(beta - beta_full) ** 2
+p_full = np.linalg.norm(X @ beta - X @ beta_full) ** 2
+r_full = np.linalg.norm(Y - X @ beta_full) ** 2
+
+# estimate leverage scores
 r_1 = 150
 x_tilde = X
 x_tilde = np.array([dct(x_tilde[:, i]) for i in range(p)]).T
@@ -97,24 +109,18 @@ rr = np.linalg.qr(x_tilde, mode='r')
 omega = X @ np.linalg.inv(rr)
 leverage_score = np.array([np.linalg.norm(omega[i, :]) ** 2 for i in range(n)])
 leverage_score = leverage_score / sum(leverage_score) * p
-plt.hist(leverage_score, 100)
 
-beta_full = np.linalg.inv(X.T @ X) @ X.T @ Y
-v_full = np.linalg.norm(beta - beta_full) ** 2
-p_full = np.linalg.norm(X @ beta - X @ beta_full) ** 2
-r_full = np.linalg.norm(Y - X @ beta_full) ** 2
 i = 0
 for xi in c:
     print(i)
     r = int(n * xi)
     vpro = np.empty((rep, 4))
     for k in range(rep):
-        data = DATA(type='Gaussian', n=n, p=p, X=X, beta=beta)
         vpro[k, :] = leverage_sampling(r)
     track[i, :] = np.mean(vpro, axis=0)
     i = i + 1
 
-# PLOTS
+# Figure 8
 d = np.linspace(0.15, 1, 500)
 plt.figure(0, figsize=(10, 8))
 p11 = plt.subplot(221)
@@ -144,7 +150,7 @@ p22 = plt.subplot(224)
 p22.scatter(c[1:], track[1:, 3], label='Simulation')
 p22.plot(d, d * (1 - gamma) / (d - gamma), label=r'Theory: $\frac{r(n-p)}{n(r-p)}$')
 p22.grid(linestyle='dotted')
-p22.set_ylabel('OE')
+p22.set_ylabel('OE', fontsize=13)
 p22.set_xlabel(r'$r/n$', fontsize=13)
 p22.legend()
 plt.subplots_adjust(hspace=.01)

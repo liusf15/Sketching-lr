@@ -1,10 +1,9 @@
 """
-    plots for example 3.10
+    This script includes the codes for creating Figure 2
 """
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 
 # leverage sampling using the exact leverage scores

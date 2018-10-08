@@ -1,10 +1,10 @@
 """
-    Sketching methods:
+    This script includes functions for 6 sketching methods:
     Gaussian projection, sparse projection, orthogonal projection,
     Randomized Hadamard projection, uniform sampling, leverage based sampling
 
     Packages required:
-    numpy, time
+    numpy, time, scipy
 """
 
 # import
@@ -16,8 +16,8 @@ from scipy.fftpack import dct
 
 
 # INPUT: target dimension r
-# RETURN: [VE, PE, RE, time]
-# apply Gaussian random projection on X and Y
+# RETURN: [VE, PE, RE, OE]
+# apply Gaussian random projection on X and Y, then do linear regression
 def gaussian_projection(data, r):
     n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
                                                            data.p_full, data.r_full, data.beta_full]
@@ -37,8 +37,8 @@ def gaussian_projection(data, r):
 
 
 # INPUT: target dimension r, density of the projection matrix s
-# RETURN: [VE, PE, RE, time]
-# apply sparse matrix multiplication on X and Y
+# RETURN: [VE, PE, RE, OE]
+# apply sparse matrix multiplication on X and Y, then do linear regression
 def sparse_projection(data, r, s=0.1):
     n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
                                                            data.p_full, data.r_full, data.beta_full]
@@ -59,7 +59,7 @@ def sparse_projection(data, r, s=0.1):
 
 
 # INPUT: n, p
-# OUTPUT: n by p orthogonal matrix
+# OUTPUT: n by p haar-distributed matrix
 def generate_haar_matrix(n, p):
     if n <= p:
         return np.linalg.qr(np.random.randn(p, n))[0].T
@@ -68,8 +68,8 @@ def generate_haar_matrix(n, p):
 
 
 # INPUT: target dimension r
-# RETURN: [VE, PE, RE, time]
-# apply Gaussian random projection on X and Y
+# RETURN: [VE, PE, RE, OE]
+# apply Gaussian random projection on X and Y, then do linear regression
 def haar_projection(data, r):
     n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
                                                            data.p_full, data.r_full, data.beta_full]
@@ -89,8 +89,8 @@ def haar_projection(data, r):
 
 
 # INPUT: target dimension r
-# RETURN: [VE, PE, RE, time]
-# apply signed permutation, fast DCT for each column (scipy.fftpack), and subsampling on X and Y
+# RETURN: [VE, PE, RE, OE]
+# apply signed permutation, fast DCT for each column (scipy.fftpack), and subsampling on X and Y, then do linear regression
 def hadamard_projection(data, r):
     n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
                                                            data.p_full, data.r_full, data.beta_full]
@@ -116,8 +116,8 @@ def hadamard_projection(data, r):
 
 
 # INPUT: target dimension r
-# RETURN: [VE, PE, RE, time]
-# apply uniform sampling without replacement on X and Y
+# RETURN: [VE, PE, RE, OE]
+# apply uniform sampling without replacement on X and Y, then do linear regression
 def uniform_sampling(data, r):
     n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
                                                            data.p_full, data.r_full, data.beta_full]
@@ -140,7 +140,7 @@ def uniform_sampling(data, r):
 # OUTPUT: estimated leverage scores of X
 # use algorithms proposed in Drineas et al 2012
 # apply fast DCT: n -> r_1
-# QR
+# QR decomposition
 def fast_leverage(data, r_1):
     n, p, X = [data.n, data.p, data.X]
     r_1 = min(r_1, p + 10)
@@ -155,9 +155,8 @@ def fast_leverage(data, r_1):
 
 
 # INPUT: target dimension r
-# RETURN: [VE, PE, RE, time]
-# estimate the leverage scores of X
-# sampling each row of X w.r.t. leverage scores without replacement on X and Ys
+# RETURN: [VE, PE, RE, OE]
+# sampling each row of X w.r.t. leverage scores without replacement on X and Y, then do linear regression
 def leverage_sampling(data, r):
     n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
                                                            data.p_full, data.r_full, data.beta_full]
@@ -178,8 +177,8 @@ def leverage_sampling(data, r):
 
 
 # INPUT: target dimension r
-# RETURN: [VE, PE]
-# use the r data points with largest leverage scores
+# RETURN: [VE, PE, RE, OE]
+# use the r data points with largest leverage scores to do linear regression
 def largest_leverage(data, r):
     n, p, beta, X, Y, v_full, p_full, r_full, beta_full = [data.n, data.p, data.beta, data.X, data.Y, data.v_full,
                                                            data.p_full, data.r_full, data.beta_full]
