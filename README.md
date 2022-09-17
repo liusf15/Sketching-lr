@@ -5,8 +5,9 @@ This is the code accompanying the paper
 
 #### Data sources:
 - Million Song Dataset: downloaded from the [UCI repository](https://archive.ics.uci.edu/ml/datasets/yearpredictionmsd)
-- Flight dataset: from R package [nycflights13](https://cran.r-project.org/web/packages/nycflights13/index.html). The dataset is processed using the [R script](Experiments/process_flight_data.R). The processed dataset can be found in the folder [datasets](datasets/).
+- Flight dataset: from R package [nycflights13](https://cran.r-project.org/web/packages/nycflights13/index.html). We preprocessed the data using the [R script](Experiments/process_flight_data.R). The processed dataset can be found in the folder [datasets](datasets/).
 
+--- 
 #### Related works on sketching:
 - Sketching for ridge regression: [paper](https://arxiv.org/pdf/1910.02373.pdf)
 - Sketching for SVD: [paper](https://ieeexplore.ieee.org/document/9537789), [code](https://github.com/liusf15/sketching-svd)
