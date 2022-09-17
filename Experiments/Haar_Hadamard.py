@@ -65,7 +65,7 @@ p22.set_ylabel('OE', fontsize=13)
 p22.set_xlabel(r'$r/n$', fontsize=13)
 p22.legend()
 plt.subplots_adjust(hspace=.01)
-plt.savefig('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/Haar.png')
+plt.savefig('plots/Haar.png')
 
 # Hadamard projection
 i = 0
@@ -113,7 +113,4 @@ p22.set_ylabel('OE', fontsize=13)
 p22.set_xlabel(r'$r/n$', fontsize=13)
 p22.legend()
 plt.subplots_adjust(hspace=.01)
-plt.savefig('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/Hadamard.png')
-
-
-
+plt.savefig('plots/Hadamard.png')

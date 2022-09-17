@@ -64,7 +64,7 @@ p22.set_ylabel('OE', fontsize=13)
 p22.set_xlabel(r'$r/n$', fontsize=13)
 p22.legend()
 plt.subplots_adjust(hspace=.01)
-plt.savefig('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/Gaussian_iid.png')
+plt.savefig('plots/Gaussian_iid.png')
 
 
 # iid projection
@@ -122,4 +122,4 @@ p22.set_ylabel('OE', fontsize=13)
 p22.set_xlabel(r'$r/n$', fontsize=13)
 p22.legend()
 plt.subplots_adjust(hspace=.01)
-plt.savefig('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/Gaussian_iid_2.png')
+plt.savefig('plots/Gaussian_iid_2.png')

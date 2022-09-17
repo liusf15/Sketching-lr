@@ -7,13 +7,13 @@ import numpy as np
 import pandas as pd
 from scipy.fftpack import dct
 import matplotlib.pyplot as plt
+import wget
 
 # import real datasets
 m = 100000
-msd = pd.read_table("/Users/sifanliu/Dropbox/Random Projection/Experiments/real_data/YearPredictionMSD.txt",
-                    delimiter=',', nrows=100000).as_matrix()
-flt = pd.read_csv(
-    '/Users/sifanliu/Dropbox/Random Projection/Experiments/real_data/nycflight/nycflight.csv').as_matrix()
+# download the MSD data from https://archive.ics.uci.edu/ml/datasets/yearpredictionmsd
+msd = np.array(pd.read_table("datasets/YearPredictionMSD.txt", delimiter=',', nrows=100000))
+flt = np.array(pd.read_csv('datasets/nycflight.csv'))
 flt = flt[:, 1:]
 
 m = flt.shape[0]
@@ -164,7 +164,7 @@ p22.set_ylabel('OE', fontsize=13)
 p22.set_xlabel(r'$r/n$', fontsize=13)
 p22.set_title('MSD OE', fontsize=13)
 p22.legend(fontsize=13)
-plt.savefig('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/front_MSD_OE.png')
+plt.savefig('plots/front_MSD_OE.png')
 
 p11 = plt.subplot(111)
 gamma = 21 / n
@@ -180,7 +180,7 @@ p11.grid(linestyle='dotted')
 p11.set_ylabel('RE', fontsize=13)
 p11.set_xlabel(r'$r/n$', fontsize=13)
 p11.legend(fontsize=13)
-plt.savefig('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/front_flight_re.png')
+plt.savefig('plots/front_flight_re.png')
 
 p11.plot(d, (d - gamma ** 2) / (d - gamma), label=r'Theory: $\frac{nr-p^2}{n(r-p)}$', ls='--')
 p11.plot(d, d * (1 - gamma) / (d - gamma), label=r'Theory: $\frac{r(n-p)}{n(r-p)}$', ls=':')
@@ -190,7 +190,7 @@ p11.set_xlabel(r'$r/n$', fontsize=13)
 p11.set_title('MSD OE')
 p11.legend()
 
-plt.savefig('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/front_MSD.png')
+plt.savefig('plots/front_MSD.png')
 
 # Section 5
 # MSD
@@ -221,10 +221,10 @@ for xi in c:
         ro[3, k, :] = leverage_sampling(r)
     track_msd[:, i, :] = np.mean(ro, axis=1)
     i = i + 1
-pd.DataFrame(track_msd[0, :, :]).to_csv('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/empirical_msd_gauss.csv')
-pd.DataFrame(track_msd[1, :, :]).to_csv('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/empirical_msd_hadamard.csv')
-pd.DataFrame(track_msd[2, :, :]).to_csv('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/empirical_msd_uniform.csv')
-pd.DataFrame(track_msd[3, :, :]).to_csv('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/empirical_msd_leverage.csv')
+pd.DataFrame(track_msd[0, :, :]).to_csv('plots/empirical_msd_gauss.csv')
+pd.DataFrame(track_msd[1, :, :]).to_csv('plots/empirical_msd_hadamard.csv')
+pd.DataFrame(track_msd[2, :, :]).to_csv('plots/empirical_msd_uniform.csv')
+pd.DataFrame(track_msd[3, :, :]).to_csv('plots/empirical_msd_leverage.csv')
 
 d = np.linspace(0.15, 1, 500)
 plt.figure(0, figsize=(13, 6))
@@ -255,7 +255,7 @@ p12.grid(linestyle='dotted')
 p12.set_xlabel(r'$r/n$', fontsize=13)
 p12.set_ylabel('OE', fontsize=13)
 p12.set_title('MSD OE', fontsize=13)
-plt.savefig('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/empirical_msd.png')
+plt.savefig('plots/empirical_msd.png')
 
 # flight
 # estimate leverage score
@@ -285,10 +285,10 @@ for xi in c:
         ro[3, k, :] = leverage_sampling(r)
     track_flt[:, i, :] = np.mean(ro, axis=1)
     i = i + 1
-pd.DataFrame(track_flt[0, :, :]).to_csv('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/empirical_flt_gauss.csv')
-pd.DataFrame(track_flt[1, :, :]).to_csv('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/empirical_flt_hadamard.csv')
-pd.DataFrame(track_flt[2, :, :]).to_csv('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/empirical_flt_uniform.csv')
-pd.DataFrame(track_flt[3, :, :]).to_csv('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/empirical_flt_leverage.csv')
+pd.DataFrame(track_flt[0, :, :]).to_csv('plots/empirical_flt_gauss.csv')
+pd.DataFrame(track_flt[1, :, :]).to_csv('plots/empirical_flt_hadamard.csv')
+pd.DataFrame(track_flt[2, :, :]).to_csv('plots/empirical_flt_uniform.csv')
+pd.DataFrame(track_flt[3, :, :]).to_csv('plots/empirical_flt_leverage.csv')
 
 d = np.linspace(0.2, 1, 500)
 plt.figure(0, figsize=(13, 6))
@@ -319,4 +319,4 @@ p12.grid(linestyle='dotted')
 p12.set_xlabel(r'$r/n$', fontsize=13)
 p12.set_ylabel('OE', fontsize=13)
 p12.set_title('nycflights13 OE', fontsize=13)
-plt.savefig('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/empirical_flt.png')
+plt.savefig('plots/empirical_flt.png')

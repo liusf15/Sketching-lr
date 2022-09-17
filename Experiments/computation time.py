@@ -208,7 +208,7 @@ def main_function(t, r):
 
 
 # MAIN
-os.chdir('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/computation_time/results')
+os.chdir('plots/computation_time/results')
 experiment_design = np.array([[50000, 0.3], [50000, 0.2], [70000, 0.2]])
 rep = 1
 # column_names = ['hadamard', 'sparse', 'uniform', 'leverage', 'deter_leverage', 'gaussian']
@@ -378,7 +378,7 @@ plt.xlabel('out-of-sample efficiency')
 plt.ylabel('time efficiency')
 plt.title(r'$\gamma=0.5$')
 plt.grid()
-os.chdir('/Users/sifanliu/Dropbox/Random Projection/Experiments/plots/computation_time')
+os.chdir('plots/computation_time')
 plt.savefig('time_efficiency_gamma='+str(gamma)+'.png')
 n = int(1e7)
 gamma = 0.1
